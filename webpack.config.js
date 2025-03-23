@@ -3,11 +3,22 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development'
 
+const optimization = () => ({
+    splitChunks: {
+        chunks: 'all',
+    },
+    minimizer: [
+        new TerserPlugin()
+    ]
+});
+
 
 module.exports = {
+    optimization: optimization(),
     entry: {
        index: './src/index.js',
        main: './src/main.js'
@@ -31,7 +42,6 @@ module.exports = {
             filename: '[name].bundle.[contenthash].min.css'
         })
     ],
-
     target: 'web',
         devServer: {
     port: 4200,
@@ -63,6 +73,19 @@ module.exports = {
                     }
                 }
             },
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-env',
+                            '@babel/preset-typescript'
+                        ]
+                    },
+               }
+           }
         ]
     }
 };
