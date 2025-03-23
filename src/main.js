@@ -1,6 +1,6 @@
 export default class main{
     constructor(buttonId){
-        this.buttonId = document.querySelector('#buttonId');
+        this.buttonId = document.querySelector(buttonId);
         this.counter = 0;
         if(this.buttonId){
             this.buttonId.addEventListener('click', this.clickMe.bind(this))
